@@ -9,7 +9,7 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, FunctionTransformer
 
-from src.modeling.process import drop_fieds, FeaturesToDict
+from src.modeling.process import drop_fields, FeaturesToDict
 
 
 def create_pipeline(model, fields_to_drop):
@@ -33,7 +33,7 @@ def create_pipeline(model, fields_to_drop):
         ('categorical_transformer', categorical_transformer, selector(dtype_include=['category', 'object']))
     ])
     pipeline = Pipeline(steps=[
-        ('column_dropper', FunctionTransformer(drop_fieds, validate=False, kw_args={'fields': fields_to_drop})),
+        ('column_dropper', FunctionTransformer(drop_fields, validate=False, kw_args={'fields': fields_to_drop})),
         ('preprocessor', preprocessor),
         ('model', model)
     ])
@@ -47,7 +47,12 @@ def pipeline_preprocessor_model_splitter(x, pipeline):
         the given dataframe x. Function is (unfortunately but necessarily) tightly coupled with the structure of the
         given model pipeline.
     This function is necessary when using DictVectorizer with categorical features with feature importance tools such
-        as SHAP (each individual dummmy variable from one column is treated separately in SHAP).
+        as SHAP (each individual dummy variable from one column is treated separately in SHAP).
+
+    :param pandas.DataFrame x: feature dataframe
+    :param sklearn.pipeline.Pipeline pipeline: fitted pipeline
+    :return: x transformed with the preprocessing steps in pipeline, and the fitted model at the end of the pipeline
+    :rtype: tuple[pandas.DataFrame, sklearn.calibration.CalibratedClassifierCV]
     """
     pipeline_copy = deepcopy(pipeline)
     fitted_model = pipeline_copy.steps.pop(len(pipeline_copy) - 1)[1]
