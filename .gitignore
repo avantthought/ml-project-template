@@ -1,0 +1,45 @@
+# extensions
+*.csv
+*.dot
+*.html
+*.ipynb
+*.jpeg
+*.jpg
+*.json
+*.pkl
+*.png
+*.pyc
+*.txt
+*.xlsx
+*.zip
+
+# dirs
+archive/
+backup/
+env/
+ENV/
+data/
+results/
+scratch/
+temp/
+tmp/
+venv/
+VENV/
+.idea/
+.ipynb_checkpoints/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+
+# files
+bar.py
+foo.py
+scratch.py
+temp.py
+.DS_Store
+.env
+.idea
+.ipynb_checkpoints
+
+# exceptions
+!src/data/
