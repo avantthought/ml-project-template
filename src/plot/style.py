@@ -1,8 +1,8 @@
 """Helpers for setting plot and colors."""
 
 import matplotlib as mpl
-import seaborn as sns
 from matplotlib.colors import LinearSegmentedColormap
+import seaborn as sns
 
 PALETTES = {"vaporwave": ["94D0FF", "8795E8", "966bff", "AD8CFF", "C774E8", "c774a9", "FF6AD5", "ff6a8b", "ff8b8b",
                           "ffa58b", "ffde8b", "cdde8b", "8bde8b", "20de8b"],
@@ -46,7 +46,7 @@ def hex_to_rgb(hex_codes):
     return rgb_list
 
 
-def register_colormaps(user_palettes):
+def register_colormaps(user_palettes=PALETTES):
     """
     Register a set of hex codes as a matplotlib colormap.
 
@@ -54,7 +54,7 @@ def register_colormaps(user_palettes):
     :return: None
     :rtype: None
     """
-    palettes = {k: hex_to_rgb(PALETTES[k]) for k in PALETTES.keys()}
+    palettes = {k: hex_to_rgb(user_palettes[k]) for k in user_palettes.keys()}
     for k in palettes.keys():
         cmap = LinearSegmentedColormap.from_list(k, palettes[k])
         mpl.colormaps.register(cmap, force=True)
@@ -73,4 +73,5 @@ def set_plot_params(font_scale=0.6, user_rcparams=RCPARAMS):
         context='paper',
         style='white',
         font_scale=font_scale,
-        rc=user_rcparams)
+        rc=user_rcparams
+    )
