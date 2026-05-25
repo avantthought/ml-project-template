@@ -68,7 +68,7 @@ class Objective:
         return scores
 
 
-class Hyperoptimize:
+class Hyperoptimizer:
     """"
     Wrapper for hyperparameter optimization for a given objective and cross-validation scheme.
 
