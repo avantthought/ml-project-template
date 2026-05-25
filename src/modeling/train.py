@@ -6,8 +6,9 @@ import numpy as np
 import pandas as pd
 
 from src.config.config import (RESULTS_DIR, DATA_LIMIT, OPTIMIZATION_ITERATIONS_LIMIT, SHAP_SAMPELE_SIZE, TARGET_NAME,
-                               TRAIN_BASELINE, TRAIN_ONLY_ONE_BASELINE, SHAP_ON_BOTH_TEST_AND_TRAIN, TEST_SET_SIZE,
-                               DECISION_THRESHOLD, CV_SPLITS, CV_SCORING_DICT, NON_MODELING_FIELDS_TO_DROP)
+                               TRAIN_BASELINE, TRAIN_ONLY_ONE_NON_BASELINE, SHAP_ON_BOTH_TEST_AND_TRAIN, TEST_SET_SIZE,
+                               DECISION_THRESHOLD, CV_SPLITS, CV_SCORING_DICT, NON_MODELING_FIELDS_TO_DROP,
+                               SAVE_PRODUCTION_PIPELINE, PRODUCTION_MODEL_NAME)
 from src.data.build import build
 from src.config.estimators import MODEL_TRAINING_LIST
 from src.modeling.evaluate import evaluate_model
@@ -21,7 +22,8 @@ from src.utils.utils import make_dir, create_datetime_id
 def master_train(results_path, model_training_list, target_name, non_modeling_fields_to_drop,
                  cv_splits, cv_scoring_dict, test_set_size=0.25, decision_threshold=0.5, data_limit=None,
                  train_baseline=True, train_only_one_baseline=False, optimization_iterations_limit=None,
-                 shap_on_both_test_and_train=False, shap_sample_size=None):
+                 shap_on_both_test_and_train=False, shap_sample_size=None, save_production_pipeline=False,
+                 production_model_name=None):
     """
     Master modeling function for all models in the given model_training_list.
 
@@ -44,6 +46,11 @@ def master_train(results_path, model_training_list, target_name, non_modeling_fi
     :param bool shap_on_both_test_and_train: whether to compute SHAP values on both train and
         test sets; default is False (only on the test set)
     :param Union[int, None] shap_sample_size: sample size for SHAP value computation; default is None (no limit)
+    :param bool save_production_pipeline: whether to save production pipeline; default is False
+    :param Union[str, None] production_model_name: name of production model to be potentially saved
+        in root; default is None
+    :return: None
+    :rtype: None
     """
     training_path = results_path / create_datetime_id()
     make_dir(training_path)
@@ -54,7 +61,6 @@ def master_train(results_path, model_training_list, target_name, non_modeling_fi
         model_training_list_adjusted = model_training_list_adjusted[:-1]
 
     print(model_training_list_adjusted)
-
     # df = build() #NOTE: build will still need raw and processed data paths passed
     # assume target column is in the dataframe
     pass
@@ -72,8 +78,10 @@ if __name__ == '__main__':
         decision_threshold=DECISION_THRESHOLD,
         data_limit=DATA_LIMIT,
         train_baseline=TRAIN_BASELINE,
-        train_only_one_baseline=TRAIN_ONLY_ONE_BASELINE,
+        train_only_one_baseline=TRAIN_ONLY_ONE_NON_BASELINE,
         optimization_iterations_limit=OPTIMIZATION_ITERATIONS_LIMIT,
         shap_on_both_test_and_train=SHAP_ON_BOTH_TEST_AND_TRAIN,
         shap_sample_size=SHAP_SAMPELE_SIZE,
+        save_production_pipeline=SAVE_PRODUCTION_PIPELINE,
+        production_model_name=PRODUCTION_MODEL_NAME
     )
