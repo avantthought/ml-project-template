@@ -4,12 +4,42 @@ from copy import deepcopy
 
 import numpy as np
 import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer, make_column_selector as selector
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, FunctionTransformer
 
-from src.modeling.process import drop_fields, FeaturesToDict
+
+class FeaturesToDict(BaseEstimator, TransformerMixin):
+    """
+    Converts a dataframe or numpy array into a dict oriented by records. This is useful when using sklearn's
+        DictVectorizer in a sklearn pipeline.
+    """
+
+    def __init__(self):
+        pass
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X, y=None):
+        if isinstance(X, np.ndarray):
+            X = pd.DataFrame(X)
+        X = X.to_dict(orient='records')
+        return X
+
+
+def drop_fields(df, fields):
+    """
+    Drops the given fields from a dataframe. Sklearn-pipeline compatible function.
+
+    :param pandas.DataFrame df: input dataframe
+    :param List[str] fields: list of column names to drop from given dataframe
+    :return: dataframe with given fields dropped
+    :rtype: pandas.DataFrame
+    """
+    return df.drop(columns=fields, errors='ignore')
 
 
 def create_pipeline(model, fields_to_drop):

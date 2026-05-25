@@ -13,7 +13,7 @@ def create_datetime_id():
     :rtype: str
     """
     now = dt.datetime.now()
-    dt_id = now().strftime("%Y%m%d%H%M%S")
+    dt_id = now.strftime("%Y%m%d%H%M%S")
     return dt_id
 
 

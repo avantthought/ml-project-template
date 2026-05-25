@@ -53,7 +53,9 @@ def master_train(results_path, model_training_list, target_name, non_modeling_fi
     if not train_baseline:
         model_training_list_adjusted = model_training_list_adjusted[:-1]
 
-    df = build() #NOTE: build will still need raw and processed data paths passed
+    print(model_training_list_adjusted)
+
+    # df = build() #NOTE: build will still need raw and processed data paths passed
     # assume target column is in the dataframe
     pass
 

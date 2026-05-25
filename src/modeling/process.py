@@ -1,8 +1,6 @@
-"""Helper functions for data processing in modeling."""
+"""Helper functions for data processing in model training."""
 
-import numpy as np
 import pandas as pd
-from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 
 
@@ -18,18 +16,6 @@ def create_target(df, target_name):
     df_copy = df.copy()
     # df_copy[target_name] =  # LOGIC FOR CREATING TARGET
     return df_copy
-
-
-def drop_fields(df, fields):
-    """
-    Drops the given fields from a dataframe. sklearn-pipeline compatible function.
-
-    :param pandas.DataFrame df: input dataframe
-    :param List[str] fields: list of column names to drop from given dataframe
-    :return: dataframe with given fields dropped
-    :rtype: pandas.DataFrame
-    """
-    return df.drop(columns=fields, errors='ignore')
 
 
 def determine_iterations(iterations_limit, model_config_iterations):
@@ -141,22 +127,3 @@ def determine_shap_sampling(x_train, x_test, y_train, y_test, n=None, reset_inde
     else:
         x_train_sub, y_train_sub = x_train, y_train
     return x_train_sub, x_test_sub, y_train_sub, y_test_sub
-
-
-class FeaturesToDict(BaseEstimator, TransformerMixin):
-    """
-    Converts a dataframe or numpy array into a dict oriented by records. This is useful when using sklearn's
-        DictVectorizer in a sklearn pipeline.
-    """
-
-    def __init__(self):
-        pass
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X, y=None):
-        if isinstance(X, np.ndarray):
-            X = pd.DataFrame(X)
-        X = X.to_dict(orient='records')
-        return X
