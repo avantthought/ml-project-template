@@ -13,7 +13,7 @@ RESULTS_DIR = PROJECT_WD / 'data' / 'modeling_results'
 # use None in the following three settings for no limits; keep them low to prototype faster
 DATA_LIMIT = None
 OPTIMIZATION_ITERATIONS_LIMIT = None
-SHAP_SAMPELE_SIZE = None
+SHAP_SAMPLE_SIZE = None
 
 TARGET_NAME = 'target'
 TRAIN_BASELINE = True
@@ -23,7 +23,7 @@ SAVE_PRODUCTION_PIPELINE = False
 PRODUCTION_MODEL_NAME = None
 
 TEST_SET_SIZE = 0.2
-DECISION_THRESHOLD = 0.5
+DECISION_BOUNDARY = 0.5
 CV_SPLITS = 5
 CV_SCORING_DICT = {  # scores recorded during hyperparameter optimization; only the first one is used to optimize
     'log_loss': 'neg_log_loss',

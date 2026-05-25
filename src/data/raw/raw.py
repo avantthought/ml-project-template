@@ -1,8 +1,6 @@
 """Helper functions for fetching raw data."""
 # Insert functions to fetch raw data (both for modeling and production).
-# These functions should save the raw data to RAW_DATA_DIR.
 # In the template, the breast cancer data is used; change function(s) to fetch the desired data
-# Call these functions in src.data.build.py to the master build() function.
 # If many helper raw data functions are needed, consider splitting them into multiple modules in src.data.raw folder.
 
 import joblib

@@ -50,7 +50,7 @@ def plot_cv_calibration(prob_true, prob_pred, name, save_path):
     :param pd.DataFrame prob_true: true probabilities of shape (n_samples, n_folds)
     :param pd.DataFrame prob_pred: predicted probabilities of shape (n_samples, n_folds)
     :param str name: name of model
-    :param str save_path: path to save plots
+    :param str save_path: path (from project root) to save plots
     :return: None
     :rtype: None
     """
@@ -103,7 +103,7 @@ def plot_calibration(prob_true, prob_pred, name, save_path):
     :param pd.DataFrame prob_true: true probabilities of shape (n_samples, 1)
     :param pd.DataFrame prob_pred: predicted probabilities of shape (n_samples, 1)
     :param str name: name of model
-    :param str save_path: path to save plots
+    :param str save_path: path (from project root) to save plots
     :return: None
     :rtype: None
     """
@@ -135,7 +135,7 @@ def plot_confusion_matrix(scores, name, save_path, decision_boundary=0.5, count=
 
     :param np.array scores: scores from model evaluation of shape (2, 2)
     :param str name: name of model
-    :param str save_path: path to save plots
+    :param str save_path: path (from project root) to save plots
     :param float decision_boundary: probability threshold for determining if a datapoint belongs to the positive or
         negative class; defaults to 0.5
     :param Union[float, None] count: Number of datapoints; if not None will be used in title of Confusion Matrix;
@@ -177,7 +177,7 @@ def make_and_save_plots(scores, name, save_path, decision_boundary=0.5):
     :param pd.DataFrame scores: scores from model evaluation of shape
         (n_number_of_metrics, n_folds + 2) or (n_number_of_metrics, 1)
     :param str name: name of model
-    :param str save_path: path to save plots
+    :param str save_path: path (from project root) to save plots
     :param float decision_boundary: probability threshold for determining if a datapoint belongs to the positive or
         negative class; defaults to 0.5
     :return: None

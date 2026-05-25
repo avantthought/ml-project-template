@@ -1,7 +1,5 @@
 """Helper functions to process the raw data"""
-# Insert functions to process the raw data, such as data wrangling related functions or some feature engineering
-# These functions should also save the processed data to PROCESSED_DATA_DIR.
-# Call these functions in src.data.build.py to the master build() function.
+# Insert functions to process the raw data, such as data wrangling related functions or feature engineering
 # Don't include MODELING helper processing functions (place these in src.modeling.process.py instead).
 # If many processing functions are needed, consider splitting them into multiple modules in the src.data.process folder.
 

@@ -14,7 +14,7 @@ def create_target(df, target_name):
     :rtype: pandas.DataFrame
     """
     df_copy = df.copy()
-    # df_copy[target_name] =  # LOGIC FOR CREATING TARGET
+    # df_copy[target_name] =  # INSERT LOGIC FOR CREATING TARGET (the template example already has the target)
     return df_copy
 
 

@@ -88,7 +88,7 @@ def evaluate_model(pipeline, x, y, estimator_name, results_path, decision_bounda
     :param pd.DataFrame x: features dataframe
     :param pd.Series y: target series
     :param str estimator_name: the name of the final estimator in the pipeline
-    :param pathlib.Path results_path: path to the model results directory
+    :param pathlib.Path results_path: path (from project root) to the model results directory
     :param float decision_boundary: probability threshold for determining if a datapoint belongs to the positive or
         negative class; defaults to 0.5
     :param bool use_cv_for_eval: Boolean for whether to use cross-validation
