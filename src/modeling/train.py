@@ -15,14 +15,13 @@ from src.config.config import (PROCESSED_DATA_DIR, RAW_DATA_DIR, LOAD_CACHED_DAT
 from src.data.build import build
 from src.config.estimators import MODEL_TRAINING_LIST
 from src.modeling.evaluate import evaluate_model
-from src.modeling.hyperoptimize import Hyperoptimizer, Objective, create_hyperopt_scores_df
 from src.modeling.pipeline import create_pipeline, pipeline_preprocessor_model_splitter
 from src.modeling.process import (create_target, create_x_y_dataframes, create_test_train_splits,
                                   determine_iterations, determine_shap_sampling)
 from src.utils.utils import make_dir, create_datetime_id
 
 
-def train_and_evaluate(training_path, model, model_name, param_grid, iterations, x_train, x_test, y_train, y_test,
+def train_and_evaluate(training_path, model, model_name, param_func, iterations, x_train, x_test, y_train, y_test,
                        non_modeling_fields_to_drop, cv_splits, cv_scoring_dict, decision_boundary=0.5,
                        shap_sample_size=None, shap_on_both_test_and_train=False, also_save_model_in_root=False):
     """
@@ -33,7 +32,8 @@ def train_and_evaluate(training_path, model, model_name, param_grid, iterations,
     :param pathlib.Path training_path: path (from project root) to dump model training results
     :param sklearn.base.BaseEstimator model: instantiated model
     :param str model_name: string name of the model
-    :param dict param_grid: parameter space to search for optimal hyperparameters for the model
+    :param function param_func: parameter space (wrapped in a function) to search for optimal hyperparameters
+        using optuna; the function needs "trial" as the only parameter with the (dictionary) parameter space returned
     :param int iterations: max number of trials to run the optimization
     :param pd.DataFrame x_train: x_train
     :param pd.DataFrame x_test: x_test
@@ -55,12 +55,12 @@ def train_and_evaluate(training_path, model, model_name, param_grid, iterations,
     make_dir(model_path)
     pipeline = create_pipeline(model=model, fields_to_drop=non_modeling_fields_to_drop)
     print(model_name)
-    objective = Objective(pipeline, x_train, y_train, cv=cv_splits, scoring=cv_scoring_dict)
-    hopt = Hyperoptimizer(objective, param_grid, max_evals=iterations).search()
-    pprint(hopt.results)
-    hyperopt_results_df = create_hyperopt_scores_df(hopt.trials, model_name)
-    hyperopt_results_df.to_csv(f'{model_path}/{model_name}_hyperopt_cv_scores.csv')
-    pipeline = pipeline.set_params(**hopt.best_params)
+    # objective = Objective(pipeline, x_train, y_train, cv=cv_splits, scoring=cv_scoring_dict)
+    # hopt = Hyperoptimizer(objective, param_grid, max_evals=iterations).search()
+    # pprint(hopt.results)
+    # hyperopt_results_df = create_hyperopt_scores_df(hopt.trials, model_name)
+    # hyperopt_results_df.to_csv(f'{model_path}/{model_name}_hyperopt_cv_scores.csv')
+    # pipeline = pipeline.set_params(**hopt.best_params)
     pipeline.fit(x_train, y_train)
     joblib.dump(pipeline, f'{model_path}/{model_name}_pipeline.pkl')
     if also_save_model_in_root:
@@ -100,7 +100,7 @@ def master_train(raw_path, raw_data_filename, process_path, processed_data_filen
     :param str processed_data_filename: name of processed data file (excluding file extension)
     :param pathlib.Path results_path: path (from project root) where to save modeling results
     :param List[scr.config.estimators.model_config] model_training_list: list of 'model_config' named tuples, where
-        each tuple corresponds ot a single model that has the model name, model object, hyperparameter grid,
+        each tuple corresponds ot a single model that has the model name, model object, hyperparameter grid function,
         and number of optimization iterations
     :param str target_name: name of the target variable/column
     :param List[str] non_modeling_fields_to_drop: list of fields/columns to drop before modeling
@@ -151,7 +151,7 @@ def master_train(raw_path, raw_data_filename, process_path, processed_data_filen
             training_path=training_path,
             model=model_tuple.model,
             model_name=model_tuple.model_name,
-            param_grid=model_tuple.param_grid,
+            param_func=model_tuple.param_func,
             iterations=iterations,
             x_train=train_test_dict['x_train'],
             x_test=train_test_dict['x_test'],
