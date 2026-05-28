@@ -1,4 +1,4 @@
-"""NOTE: hyperopt is no longer maintained, and template uses optuna.py instead.
+"""NOTE: hyperopt is no longer maintained, and template uses optimize_optuna.py instead.
 Helper functions for hyperparameter optimization using the hyperopt library."""
 
 # import time

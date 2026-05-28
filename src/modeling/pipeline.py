@@ -86,9 +86,13 @@ def pipeline_preprocessor_model_splitter(x, pipeline):
     """
     pipeline_copy = deepcopy(pipeline)
     fitted_model = pipeline_copy.steps.pop(len(pipeline_copy) - 1)[1]
-    num_cols = pipeline_copy.named_steps['column_dropper'].transformer(x).select_dtypes(
+    num_cols = pipeline_copy.named_steps['column_dropper'].transform(x).select_dtypes(
         include=[np.number]).columns.tolist()
-    cat_cols = pipeline_copy.named_steps['preprocessor'].named_transformers_.get(
-        'categorical_transformer').named_steps['dict_vectorizer'].feature_names_
-    x_preprocessed = pd.DataFrame(pipeline_copy.transform(x), columns=num_cols + cat_cols)
+    try:
+        cat_cols = pipeline_copy.named_steps['preprocessor'].named_transformers_.get(
+            'categorical_transformer').named_steps['dict_vectorizer'].feature_names_
+        cols = num_cols + cat_cols
+    except AttributeError:
+        cols = num_cols
+    x_preprocessed = pd.DataFrame(pipeline_copy.transform(x), columns=cols)
     return x_preprocessed, fitted_model

@@ -12,7 +12,7 @@ RESULTS_DIR = PROJECT_WD / 'data' / 'modeling_results'
 
 # use None in the following three settings for no limits; keep them low to prototype faster
 DATA_LIMIT = None
-OPTIMIZATION_ITERATIONS_LIMIT = 5
+OPTIMIZATION_ITERATIONS_LIMIT = None
 SHAP_SAMPLE_SIZE = None
 
 TARGET_NAME = 'target'

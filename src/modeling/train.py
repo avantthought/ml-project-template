@@ -1,5 +1,7 @@
 """Model training script."""
 
+import warnings
+
 from auto_shap import produce_shap_values_and_summary_plots
 import joblib
 import pandas as pd
@@ -13,11 +15,13 @@ from src.config.config import (PROCESSED_DATA_DIR, RAW_DATA_DIR, LOAD_CACHED_DAT
 from src.data.build import build
 from src.config.estimators import MODEL_TRAINING_LIST
 from src.modeling.evaluate import evaluate_model
-from src.modeling.optuna import train_pipeline_with_optuna
+from src.modeling.optimize_optuna import train_pipeline_with_optuna
 from src.modeling.pipeline import create_pipeline, pipeline_preprocessor_model_splitter
 from src.modeling.process import (create_target, create_x_y_dataframes, create_test_train_splits,
                                   determine_iterations, determine_shap_sampling)
 from src.utils.utils import make_dir, create_datetime_id
+
+warnings.filterwarnings('ignore')
 
 
 def train_and_evaluate(training_path, model, model_name, param_func, iterations, x_train, x_test, y_train, y_test,

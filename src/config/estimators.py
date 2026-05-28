@@ -64,7 +64,7 @@ MODEL_TRAINING_LIST = [
     ),
     model_named_tuple(
         model_name='lightgbm',
-        model=CalibratedClassifierCV(LGBMClassifier()),
+        model=CalibratedClassifierCV(LGBMClassifier(verbosity=-1)),
         param_func=create_lightgbm_trial,
         iterations=50,
     ),
