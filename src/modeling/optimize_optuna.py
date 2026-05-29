@@ -77,5 +77,5 @@ def train_pipeline_with_optuna(pipeline, x, y, estimator_name, cv_strategy, cv_s
     pipeline.fit(x, y)
     if save_scores:
         if save_path is not None:
-            cv_scores_df.to_csv(f'{save_path}/{estimator_name}_optuna_cv_scores.csv')
+            cv_scores_df.to_csv(f'{save_path}/{estimator_name}_optuna_cv_scores.csv', index=False)
     return pipeline

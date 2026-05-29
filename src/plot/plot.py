@@ -143,10 +143,10 @@ def plot_confusion_matrix(scores, name, save_path, decision_boundary=0.5, count=
     :return: None
     :rtype: None
     """
-    scores = (scores / scores.sum()).round(3)
+    scores_copy = (scores / scores.sum()).round(3)
     fig, ax = plt.subplots(nrows=1, ncols=1,
                            figsize=(4, 4))
-    ax.imshow(scores, cmap='hellafresh')
+    ax.imshow(scores_copy, cmap='hellafresh')
     ax.set_xticks([0, 1])
     ax.set_yticks([0, 1])
     ax.set_xticklabels(['Positive', 'Negative'])
@@ -155,9 +155,9 @@ def plot_confusion_matrix(scores, name, save_path, decision_boundary=0.5, count=
     ax.set_ylabel('True Label')
     for i in [0, 1]:
         for j in [0, 1]:
-            ax.text(i, j, scores[i, j],
+            ax.text(i, j, scores_copy[i, j],
                     ha='center', va='center',
-                    colors='xkcd:off white',
+                    color='xkcd:off white',
                     fontsize=18
                     )
     if count is None:

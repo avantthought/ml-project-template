@@ -1,6 +1,6 @@
 """Helper functions for evaluating models."""
 
-import functools
+from functools import partial
 
 import numpy as np
 import pandas as pd
@@ -42,6 +42,7 @@ def compile_scores(y, y_pred, y_pred_proba, decision_boundary=0.5):
     tn, fp, fn, tp = confusion_matrix(y, y_pred).ravel()
     prob_true, prob_pred = calibration_curve(y, y_pred_proba, n_bins=10,
                                              strategy='quantile')
+    #TODO: move evaluation metric dictionary to config
     scores = {
         'datapoints': len(y),
         'decision_boundary': decision_boundary,
@@ -98,7 +99,7 @@ def evaluate_model(pipeline, x, y, estimator_name, results_path, decision_bounda
     :rtype: None
     """
     if use_cv_for_eval:
-        custom_scorer_partial = functools.partial(custom_scorer, decision_boundary=decision_boundary)
+        custom_scorer_partial = partial(custom_scorer, decision_boundary=decision_boundary)
         scores = cross_validate(pipeline, x, y, cv=cv, scoring=custom_scorer_partial)
         scores = pd.DataFrame(scores).T
         num_folds = scores.shape[1]
@@ -106,13 +107,12 @@ def evaluate_model(pipeline, x, y, estimator_name, results_path, decision_bounda
         scores.index.name = 'metric'
         scores['mean'] = scores.mean(axis=1)
         scores['std'] = scores.std(axis=1)
-        scores = scores[['mean']] + [col for col in scores.columns if col != 'mean']
+        scores = scores[['mean'] + [col for col in scores.columns if col != 'mean']]
     else:
         scores = custom_scorer(pipeline, x, y, decision_boundary=decision_boundary)
         for key, value in scores.items():
             scores[key] = [value]
         scores = pd.DataFrame(scores).T
-        scores.index.name = 'metric'
         scores.columns = ['value']
         scores.index = ['test_' + index for index in scores.index]
         scores.index.name = 'metric'
