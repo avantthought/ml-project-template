@@ -43,6 +43,7 @@ def make_plot_data(scores, col_name):
     return prob_true, prob_pred, conf_matrix_scores, count
 
 
+#TODO: fix cv version of calibration curve plot (non-cv version is working)
 def plot_cv_calibration(prob_true, prob_pred, name, save_path):
     """
     Plot calibration curves and errors.
